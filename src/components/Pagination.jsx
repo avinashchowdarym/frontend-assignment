@@ -1,18 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../App.css'
 
 const Pagination = ({page,setPage,totalPages}) => {
 
     let paginate = Array.from({length : totalPages} , (_,i) => i+1);
-    console.log(page)
-
-    
+    let pageshow ;
+    console.log(pageshow)
+    useEffect(()=>{
+        
+            if(page > (totalPages-5)) {
+                 pageshow = paginate.slice(-5,0);
+            }
+            else{
+                 pageshow = paginate.slice(0,5);
+            }
+    },[page])
+    if(page > totalPages - 5){
+        pageshow = paginate.slice(totalPages-5,totalPages);
+    }
+    else{
+        pageshow = paginate.slice(page-1,page+4);
+    }
   return (
     <div className='pagination-container'>
         {
-            page > 1 && (
+             (
                 <button onClick={()=>setPage(page!== 1 ? page-1 : 1)}>
-                    Back
+                    Previous
                 </button>
             )
         }
@@ -20,7 +34,7 @@ const Pagination = ({page,setPage,totalPages}) => {
         onClick={(e)=>setPage(parseInt(e.target.innerText))}
         >
             {
-                paginate.map((pageNumber)=>(
+                pageshow.map((pageNumber)=>(
                     <button key={pageNumber} className={pageNumber === page ? "active" : ""}>
                         {pageNumber}
                     </button>
